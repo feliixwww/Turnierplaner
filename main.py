@@ -1,6 +1,7 @@
 import random
 
 
+
 teilnehmer = []
 
 
@@ -53,9 +54,9 @@ while anzahl_schleifendurchläufe > 0:
     del spiele_berechnung[0]
     anzahl_schleifendurchläufe -= 1
 
-print(spiele)
-global x
-x = 0
+
+global so_oft_schleife
+so_oft_schleife = 0
 global teilnehmer_1, teilnehmer_2, teilnehmer_2_vorher, teilnehmer_1_vorher
 teilnehmer_1 = 0
 teilnehmer_1_vorher = 0
@@ -79,7 +80,7 @@ def zufall_spiel_erstellen(übrigen_spiele, teilnehmer):
         return spiel
 
 def berechnen_spiele(teilnehmer):
-    global teilnehmer_1, teilnehmer_1_vorher, teilnehmer_2, teilnehmer_2_vorher, spiele
+    global teilnehmer_1, teilnehmer_1_vorher, teilnehmer_2, teilnehmer_2_vorher, spiele, so_oft_schleife
     spiel = ""
     übrigen_spiele = list(spiele)
     while spiel not in spiele:
@@ -95,6 +96,7 @@ def berechnen_spiele(teilnehmer):
             spiel = ""
             if übrigen_spiele == []:
                 spiel = zufall_spiel_erstellen(spiele, teilnehmer)
+        so_oft_schleife += 1
 
 
     teilnehmer_1_vorher = teilnehmer_1
@@ -113,6 +115,7 @@ while spiele_reihenfolge_schleife > 0:
 
 for element in spiele_reihenfolge:
     print(element + "\n")
+print(so_oft_schleife)
 
 
 
