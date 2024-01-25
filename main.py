@@ -1,3 +1,5 @@
+import random
+
 
 teilnehmer = []
 
@@ -60,27 +62,43 @@ teilnehmer_1_vorher = 0
 teilnehmer_2 = 0
 teilnehmer_2_vorher = 0
 
+def zufall_spiel_erstellen(übrigen_spiele, teilnehmer):
+    global teilnehmer_1, teilnehmer_2
+    teilnehmer_1 = random.randint(0, len(teilnehmer)-1)
+    teilnehmer_2 = random.randint(0, len(teilnehmer)-1)
+    if teilnehmer_2 < teilnehmer_1:
+        teilnehmer_1_tausch = teilnehmer_1
+        teilnehmer_2_tausch = teilnehmer_2
+        teilnehmer_2 = teilnehmer_1_tausch
+        teilnehmer_1 = teilnehmer_2_tausch
+    spiel = f"{teilnehmer[teilnehmer_1]} vs {teilnehmer[teilnehmer_2]}"
+    if spiel in übrigen_spiele:
+        return spiel
+    else:
+        spiel = ""
+        return spiel
+
 def berechnen_spiele(teilnehmer):
-    global teilnehmer_1, teilnehmer_1_vorher, teilnehmer_2, teilnehmer_2_vorher
+    global teilnehmer_1, teilnehmer_1_vorher, teilnehmer_2, teilnehmer_2_vorher, spiele
     spiel = ""
+    übrigen_spiele = list(spiele)
     while spiel not in spiele:
-        if teilnehmer_1 == teilnehmer_2_vorher or teilnehmer_1 == teilnehmer_1_vorher:
-            teilnehmer_1 += 1
-            if teilnehmer_1 >= len(teilnehmer):
-                teilnehmer_1 = 0
-        if teilnehmer_2 == teilnehmer_2_vorher or teilnehmer_2 == teilnehmer_1_vorher:
-            teilnehmer_2 += 2
-            if teilnehmer_2 >= len(teilnehmer):
-                teilnehmer_2 = 1
-        if teilnehmer_1 == teilnehmer_2:
-            teilnehmer_2 += 1
-            if teilnehmer_2 >= len(teilnehmer):
-                teilnehmer_2 = 1
-        teilnehmer_1_vorher = teilnehmer_1
-        teilnehmer_2_vorher = teilnehmer_2
+        spiel = zufall_spiel_erstellen(spiele, teilnehmer)
+        if spiel != "":
+            if übrigen_spiele != [] and spiel in übrigen_spiele:
+                übrigen_spiele.remove(spiel)
+        if teilnehmer_1 == teilnehmer_1_vorher or teilnehmer_1 == teilnehmer_2_vorher:
+            spiel = ""
+            if übrigen_spiele == []:
+                spiel = zufall_spiel_erstellen(übrigen_spiele, teilnehmer)
+        if teilnehmer_2 == teilnehmer_1_vorher or teilnehmer_2 == teilnehmer_2_vorher:
+            spiel = ""
+            if übrigen_spiele == []:
+                spiel = zufall_spiel_erstellen(spiele, teilnehmer)
 
-        spiel = f"{teilnehmer[teilnehmer_1]} vs {teilnehmer[teilnehmer_2]}"
 
+    teilnehmer_1_vorher = teilnehmer_1
+    teilnehmer_2_vorher = teilnehmer_2
     spiele.remove(spiel)
     return spiel
 
@@ -92,7 +110,10 @@ spiele_reihenfolge = []
 while spiele_reihenfolge_schleife > 0:
     spiele_reihenfolge.append(berechnen_spiele(teilnehmer))
     spiele_reihenfolge_schleife -= 1
-    print(spiele_reihenfolge, spiele)
+
+for element in spiele_reihenfolge:
+    print(element + "\n")
+
 
 
 
